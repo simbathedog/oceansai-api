@@ -1,5 +1,5 @@
 # FijianAI API (DigitalOcean App Platform)
-Deploy steps:
+Deploy steps :
 1) Create a GitHub repo (e.g., `fijianai-api`) and upload these files.
 2) App Platform → **Web Services** → connect repo (region: same as DB).
 3) Build: `npm install && npm run build`
