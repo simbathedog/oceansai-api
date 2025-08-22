@@ -2,7 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import { Pool } from 'pg';
 const app = express();
-app.use(express.json());
+/* OCEANSAI_ROOT_ROUTE */
+app.get('/', (_req, res) => {
+    res.type('text/plain').send('OceansAI API is running. See /health for status.');
+});
+/* END_OCEANSAI_ROOT_ROUTE */ app.use(express.json());
 const CORS_ORIGIN = process.env.CORS_ORIGIN || 'https://fijianai.com';
 app.use(cors({ origin: CORS_ORIGIN, credentials: true }));
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -21,4 +25,7 @@ app.get('/dashboard', (req, res) => { const u = req.user; if (!u)
     return res.status(401).json({ ok: false }); const route = u.role === 'ADMIN' ? '/admin/home' : u.role === 'TEACHER' ? '/teacher/home' : '/student/home'; res.json({ ok: true, route }); });
 app.get('/modules', async (_req, res) => res.json({ ok: true, data: [] }));
 const PORT = process.env.PORT || 3000;
+app.get('/', (_req, res) => {
+    res.type('text/plain').send('OceansAI API is running. See /health for status.');
+});
 app.listen(PORT, () => console.log(`API listening on :${PORT}`));
