@@ -17,8 +17,9 @@ app.get("/", (_req, res) => {
 });
 
 // CORS (keep your origin)
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "https://fijianai.com";
-app.use(cors({ origin: CORS_ORIGIN, credentials: true }));
+const CORS_ORIGIN = process\.env\.CORS_ORIGIN || "https://fijianai.com";
+const ORIGINS = CORS_ORIGIN.split(',').map(o=>o.trim()).filter(Boolean);
+app.use(cors({ origin: ORIGINS.length>1 ? ORIGINS : ORIGINS[0], credentials: true }));
 
 // DB pool (optional)
 const DATABASE_URL = process.env.DATABASE_URL;
