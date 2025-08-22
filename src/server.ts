@@ -1,6 +1,12 @@
 import express from 'express';import cors from 'cors';import {Pool} from 'pg';
 type Role='ADMIN'|'TEACHER'|'STUDENT';type User={id:string;name:string;username:string;role:Role};
-const app=express();app.use(express.json());
+const app=express();
+
+/* OCEANSAI_ROOT_ROUTE */
+app.get('/', (_req, res) => {
+  res.type('text/plain').send('OceansAI API is running. See /health for status.');
+});
+/* END_OCEANSAI_ROOT_ROUTE */app.use(express.json());
 const CORS_ORIGIN=process.env.CORS_ORIGIN||'https://fijianai.com';app.use(cors({origin:CORS_ORIGIN,credentials:true}));
 const DATABASE_URL=process.env.DATABASE_URL;const pool=DATABASE_URL?new Pool({connectionString:DATABASE_URL,ssl:{rejectUnauthorized:false}}):null;
 app.use((req,_res,next)=>{(req as any).user={id:'u1',name:'Dev',username:'dev',role:'STUDENT' as Role};next();});
