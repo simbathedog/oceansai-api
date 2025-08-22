@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 import { Pool } from "pg";
 const app = express();
-// Root route (single, canonical)
+`r`;
+napp.use(studentRouter);
+`r`;
+n; // Root route (single, canonical)
 app.get("/", (_req, res) => {
     res.type("text/plain").send("OceansAI API is running. See /health for status.");
 });
