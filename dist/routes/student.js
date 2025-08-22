@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { subjects, modules, lessons } from "../data/fixtures";
+import { subjects, modules, lessons } from "../data/fixtures.js";
 const r = Router();
 // --- In-memory stores (replace with DB later) ---
 const progressStore = new Map(); // key: userId|lessonId

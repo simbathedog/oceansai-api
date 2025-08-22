@@ -1,17 +1,18 @@
 import express from "express";
 import cors from "cors";
 import { Pool } from "pg";
+import { studentRouter } from "./routes/student.js";
 const app = express();
-`r`;
-napp.use(studentRouter);
-`r`;
-n; // Root route (single, canonical)
+// Parse JSON before any routers that need it
+app.use(express.json());
+// Root route (single, canonical)
 app.get("/", (_req, res) => {
     res.type("text/plain").send("OceansAI API is running. See /health for status.");
 });
-app.use(express.json());
+// CORS (keep your origin)
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "https://fijianai.com";
 app.use(cors({ origin: CORS_ORIGIN, credentials: true }));
+// DB pool (optional)
 const DATABASE_URL = process.env.DATABASE_URL;
 const pool = DATABASE_URL
     ? new Pool({
@@ -19,7 +20,7 @@ const pool = DATABASE_URL
         ssl: { rejectUnauthorized: false },
     })
     : null;
-// Temporary demo user
+// Demo user
 app.use((req, _res, next) => {
     req.user = {
         id: "u1",
@@ -29,6 +30,7 @@ app.use((req, _res, next) => {
     };
     next();
 });
+// Health
 app.get("/health", async (_req, res) => {
     try {
         if (!pool)
@@ -40,6 +42,11 @@ app.get("/health", async (_req, res) => {
         return res.status(500).json({ ok: false, error: e?.message });
     }
 });
+// Mount student APIs
+app.use(studentRouter);
+// Tiny ping for quick smoke-tests
+app.get("/catalog/ping", (_req, res) => res.json({ ok: true }));
+// Other demo endpoints
 app.get("/dashboard", (req, res) => {
     const u = req.user;
     if (!u)
