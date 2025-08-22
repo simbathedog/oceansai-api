@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { Pool } from "pg";
-import { studentRouter } from "./routes/student";
+import { studentRouter } from "./routes/student.js";
 
 type Role = "ADMIN" | "TEACHER" | "STUDENT";
 type User = { id: string; name: string; username: string; role: Role };
@@ -69,4 +69,5 @@ app.listen(PORT, () => console.log(`API listening on :${PORT}`));
 
 
 app.get("/catalog/ping", (_req,res)=>res.json({ok:true}));
+
 
