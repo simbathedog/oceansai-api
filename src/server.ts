@@ -1,13 +1,16 @@
 import express from "express";
 import cors from "cors";
 import { Pool } from "pg";
+import { studentRouter } from "./routes/student";
 
 type Role = "ADMIN" | "TEACHER" | "STUDENT";
 type User = { id: string; name: string; username: string; role: Role };
 
 const app = express();
 
-`r`napp.use(studentRouter);`r`n// Root route (single, canonical)
+
+app.use(studentRouter);
+// Root route (single, canonical)
 app.get("/", (_req, res) => {
   res.type("text/plain").send("OceansAI API is running. See /health for status.");
 });
@@ -63,3 +66,4 @@ app.get("/modules", async (_req, res) => res.json({ ok: true, data: [] }));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`API listening on :${PORT}`));
+
