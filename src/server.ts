@@ -2,6 +2,16 @@ import express from 'express';import cors from 'cors';import {Pool} from 'pg';
 type Role='ADMIN'|'TEACHER'|'STUDENT';type User={id:string;name:string;username:string;role:Role};
 const app=express();
 
+/* OCEANSAI_ROOT_GUARD */
+// Serve a simple message for GET /
+app.use((req, res, next) => {
+  if (req.method === 'GET' && (req.path === '/' || req.url === '/')) {
+    return res.type('text/plain').send('OceansAI API is running. See /health for status.');
+  }
+  next();
+});
+/* END_OCEANSAI_ROOT_GUARD */
+
 /* OCEANSAI_ROOT_ROUTE */
 app.get('/', (_req, res) => {
   res.type('text/plain').send('OceansAI API is running. See /health for status.');
