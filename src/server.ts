@@ -8,7 +8,18 @@ type User = { id: string; name: string; username: string; role: Role };
 
 const app = express();
 
-// Parse JSON before any routers that need it
+// Security headers
+app.use(helmet());
+
+// Tiny request logger
+app.use(morgan("tiny"));
+
+// JSON parser (keep early)
+app.use(express.json());
+
+// Global rate limit
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 500, standardHeaders: true, legacyHeaders: false });
+app.use(limiter);// Parse JSON before any routers that need it
 app.use(express.json());
 
 // Root route (single, canonical)
@@ -52,10 +63,26 @@ app.get("/health", async (_req, res) => {
     return res.status(500).json({ ok: false, error: e?.message });
   }
 });
+const attemptsLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false });
 
+const attemptSchema = z.object({
+  lessonId: z.string().min(1),
+  moduleId: z.string().min(1),
+  response: z.object({
+    blockIndex: z.number().int().min(0),
+    choice: z.number().int().min(0)
+  })
+});
+
+app.use("/me/attempts", attemptsLimiter, (req, res, next) => {
+  const valid = attemptSchema.safeParse(req.body);
+  if (!valid.success) {
+    return res.status(400).json({ ok: false, error: "Invalid payload", details: valid.error.flatten() });
+  }
+  next();
+});
 // Mount student APIs
 app.use(studentRouter);
-
 // Tiny ping for quick smoke-tests
 app.get("/catalog/ping", (_req, res) => res.json({ ok: true }));
 
