@@ -10,7 +10,7 @@ const app = express();
 
 
 app.use(express.json());
-app.use(studentRouter);
+app.use(express.json());`r`napp.use(studentRouter);
 // Root route (single, canonical)
 app.get("/", (_req, res) => {
   res.type("text/plain").send("OceansAI API is running. See /health for status.");
@@ -70,5 +70,6 @@ app.listen(PORT, () => console.log(`API listening on :${PORT}`));
 
 
 app.get("/catalog/ping", (_req,res)=>res.json({ok:true}));
+
 
 
