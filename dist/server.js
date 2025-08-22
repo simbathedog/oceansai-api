@@ -2,6 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import { Pool } from 'pg';
 const app = express();
+/* OCEANSAI_REQ_LOG */
+app.use((req, _res, next) => {
+    console.log('[REQ]', req.method, req.url);
+    next();
+});
+/* END_OCEANSAI_REQ_LOG */
 /* OCEANSAI_ROOT_GUARD */
 // Serve a simple message for GET /
 app.use((req, res, next) => {
