@@ -7,4 +7,7 @@ app.use((req,_res,next)=>{(req as any).user={id:'u1',name:'Dev',username:'dev',r
 app.get('/health',async(_req,res)=>{try{if(!pool)return res.json({ok:true,db:false});const r=await pool.query('select 1 as ok');return res.json({ok:true,db:r.rows[0].ok===1});}catch(e:any){return res.status(500).json({ok:false,error:e?.message});}});
 app.get('/dashboard',(req,res)=>{const u=(req as any).user as User|undefined;if(!u)return res.status(401).json({ok:false});const route=u.role==='ADMIN'?'/admin/home':u.role==='TEACHER'?'/teacher/home':'/student/home';res.json({ok:true,route});});
 app.get('/modules',async(_req,res)=>res.json({ok:true,data:[]}));
-const PORT=process.env.PORT||3000;app.listen(PORT,()=>console.log(`API listening on :${PORT}`));
+const PORT=process.env.PORT||3000;app.get('/', (_req, res) => {
+  res.type('text/plain').send('OceansAI API is running. See /health for status.');
+});
+app.listen(PORT,()=>console.log(`API listening on :${PORT}`));
