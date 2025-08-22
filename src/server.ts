@@ -7,7 +7,7 @@ type User = { id: string; name: string; username: string; role: Role };
 
 const app = express();
 
-// Root route (single, canonical)
+`r`napp.use(studentRouter);`r`n// Root route (single, canonical)
 app.get("/", (_req, res) => {
   res.type("text/plain").send("OceansAI API is running. See /health for status.");
 });
