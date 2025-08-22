@@ -9,6 +9,7 @@ type User = { id: string; name: string; username: string; role: Role };
 const app = express();
 
 
+app.use(express.json());
 app.use(studentRouter);
 // Root route (single, canonical)
 app.get("/", (_req, res) => {

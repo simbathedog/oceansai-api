@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { subjects, modules, lessons } from "../data/fixtures";
+import { subjects, modules, lessons } from "../data/fixtures.js";
 import type { Attempt, Lesson, Module, ProgressStatus, UserProgress } from "../types";
 
 const r = Router();
@@ -175,3 +175,5 @@ r.get("/me/attempts", (req, res) => {
 });
 
 export const studentRouter = r;
+
+
